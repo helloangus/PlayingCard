@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A53282B023EBC7A600ED2C17 /* PlayingCardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53282AF23EBC7A600ED2C17 /* PlayingCardDeck.swift */; };
+		A53282B223EBEB6000ED2C17 /* PlayingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53282B123EBEB6000ED2C17 /* PlayingCardView.swift */; };
 		A5BEB5F123EBB22600A11EC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEB5F023EBB22600A11EC2 /* AppDelegate.swift */; };
 		A5BEB5F323EBB22600A11EC2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEB5F223EBB22600A11EC2 /* SceneDelegate.swift */; };
 		A5BEB5F523EBB22600A11EC2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BEB5F423EBB22600A11EC2 /* ViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		A53282AF23EBC7A600ED2C17 /* PlayingCardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardDeck.swift; sourceTree = "<group>"; };
+		A53282B123EBEB6000ED2C17 /* PlayingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardView.swift; sourceTree = "<group>"; };
 		A5BEB5ED23EBB22600A11EC2 /* PlayingCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayingCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5BEB5F023EBB22600A11EC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5BEB5F223EBB22600A11EC2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				A5BEB60423EBB26A00A11EC2 /* Supporting Files */,
 				A5BEB5F223EBB22600A11EC2 /* SceneDelegate.swift */,
 				A5BEB5F423EBB22600A11EC2 /* ViewController.swift */,
+				A53282B123EBEB6000ED2C17 /* PlayingCardView.swift */,
 				A5BEB5F623EBB22600A11EC2 /* Main.storyboard */,
 				A5BEB5F923EBB22E00A11EC2 /* Assets.xcassets */,
 				A5BEB5FE23EBB22E00A11EC2 /* Info.plist */,
@@ -153,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5BEB5F523EBB22600A11EC2 /* ViewController.swift in Sources */,
+				A53282B223EBEB6000ED2C17 /* PlayingCardView.swift in Sources */,
 				A5BEB5F123EBB22600A11EC2 /* AppDelegate.swift in Sources */,
 				A53282B023EBC7A600ED2C17 /* PlayingCardDeck.swift in Sources */,
 				A5BEB60823EBB2EC00A11EC2 /* PlayingCard.swift in Sources */,

@@ -17,7 +17,10 @@ struct PlayingCard: CustomStringConvertible {
     var rank: Rank
 
     //花色枚举
-    enum Suit: String {
+    enum Suit: String, CustomStringConvertible {
+        
+        var description: String{return rawValue}
+        
         case spades = "♠️"
         case hearts = "♥️"
         case diamonds = "♣️"
@@ -28,7 +31,16 @@ struct PlayingCard: CustomStringConvertible {
     }
     
     //数字枚举（分A、数字、和字母）
-    enum Rank {
+    enum Rank: CustomStringConvertible {
+        
+        var description: String{
+            switch self {
+            case .ace:  return "A"
+            case .numeric(let pips):    return String(pips)
+            case .face(let kind):   return kind
+            }
+        }
+        
         case ace
         case face(String)
         case numeric(Int)
