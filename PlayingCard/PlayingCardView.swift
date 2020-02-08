@@ -8,12 +8,17 @@
 
 import UIKit
 
+//可以在storyboard中直接看到效果
+@IBDesignable
 class PlayingCardView: UIView {
     
     //以下变量每次变化时都重绘view
-    var rank: Int = 5 { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    @IBInspectable
+    var rank: Int = 13 { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    @IBInspectable
     var suit: String = "♥️" { didSet { setNeedsDisplay(); setNeedsLayout()}}
-    var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    @IBInspectable
+    var isFaceUp: Bool = false { didSet { setNeedsDisplay(); setNeedsLayout()}}
 
     //设置rank和suit分两行且中心对齐的函数
     private func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString{
@@ -74,12 +79,80 @@ class PlayingCardView: UIView {
             .offsetBy(dx: -lowerRightCornerLabel.frame.size.width, dy: -lowerRightCornerLabel.frame.size.height)    //找到bounds的右下，再做两次平移
     }
     
+    //为数字时画出对应数量的花色
+    private func drawPips(){
+        
+        //对应的花色排布
+        let pipsPerRowForRank = [[0], [1], [1,1], [1,1,1], [2,2], [2,1,2], [2,2,2], [2,1,2,2], [2,2,2,2], [2,2,1,2,2], [2,2,2,2,2]]
+        
+        //得到内部花色的String及其大小
+        func creatPipString(thatFits pipRect: CGRect) -> NSAttributedString{
+            let maxVerticalPipCount = CGFloat(pipsPerRowForRank.reduce(0) {max($1.count, $0)})
+            let maxHorizontalPipCount = CGFloat(pipsPerRowForRank.reduce(0) {max($1.max() ?? 0, $0)})
+            let verticalPipRowSpacing = pipRect.size.height / maxVerticalPipCount
+            let attemptedPipString = centeredAttributedString(suit, fontSize: verticalPipRowSpacing)
+            let probablyOkayPipStringFontSize = verticalPipRowSpacing / (attemptedPipString.size().height / verticalPipRowSpacing)
+            let probablyOkayPipString = centeredAttributedString(suit, fontSize: probablyOkayPipStringFontSize)
+            
+            //超过了则进行缩放
+            if probablyOkayPipString.size().width > pipRect.size.width / maxHorizontalPipCount{
+                return centeredAttributedString(suit, fontSize: probablyOkayPipStringFontSize / (probablyOkayPipString.size().width / (pipRect.size.width / maxHorizontalPipCount)))
+            } else{
+                return probablyOkayPipString
+            }
+        }
+        
+        if pipsPerRowForRank.indices.contains(rank){
+            let pipsPerRow = pipsPerRowForRank[rank]        //取出每行pip的数量
+            //绘制pips所在的矩形
+            var pipRect = bounds.insetBy(dx: cornerOffset, dy: cornerOffset).insetBy(dx: cornerString.size().width, dy: cornerString.size().height/2)
+            //得到对应的花色
+            let pipString = creatPipString(thatFits: pipRect)
+            //得到各行的间距
+            let pipRowSpacing = pipRect.size.height / CGFloat(pipsPerRow.count)
+            
+            //外框大小同步
+            pipRect.size.height = pipString.size().height
+            pipRect.origin.y += (pipRowSpacing - pipRect.size.height) / 2
+            
+            //绘制各行的pips
+            for pipCount in pipsPerRow{
+                switch pipCount {
+                case 1:
+                    pipString.draw(in: pipRect)         //绘制在中心
+                case 2:
+                    pipString.draw(in: pipRect.leftHalf)    //分左右绘制
+                    pipString.draw(in: pipRect.rightHalf)
+                default:
+                    break
+                }
+                
+                pipRect.origin.y += pipRowSpacing
+            }
+        }
+        
+    }
+    
     //绘制卡牌外框
     override func draw(_ rect: CGRect) {
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)     //圆角矩形，用view的边界作为圆角矩形的边界
         roundedRect.addClip()
         UIColor.white.setFill()     //白色填充
         roundedRect.fill()
+        
+        //设置内部和背面填充图案
+        if isFaceUp{                //卡牌朝上
+            if let faceCardImage = UIImage(named: rankString, in: Bundle(for: self.classForCoder), compatibleWith: traitCollection){
+                faceCardImage.draw(in: bounds.zoom(by: SizeRatio.faceCardImageSizeToBoundsSize)) //缩放
+            } else{
+                drawPips()
+            }
+        } else{                     //卡牌朝下
+            if let cardBackImage = UIImage(named: "back"+"3", in: Bundle(for: self.classForCoder), compatibleWith: traitCollection){
+                cardBackImage.draw(in: bounds)
+            }
+        }
+        
     }
 
 }
@@ -128,7 +201,7 @@ extension CGRect{
     }
     
     var rightHalf: CGRect{
-        return CGRect(x: minX, y: minY, width: width/2, height: height)
+        return CGRect(x: midX, y: minY, width: width/2, height: height)
     }
     
     func inset(by size: CGSize) -> CGRect{
