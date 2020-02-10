@@ -14,11 +14,14 @@ class PlayingCardView: UIView {
     
     //以下变量每次变化时都重绘view
     @IBInspectable
-    var rank: Int = 13 { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    var rank: Int = 10 { didSet { setNeedsDisplay(); setNeedsLayout()}}
     @IBInspectable
     var suit: String = "♥️" { didSet { setNeedsDisplay(); setNeedsLayout()}}
     @IBInspectable
-    var isFaceUp: Bool = false { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout()}}
+    
+    //当内部为图片时可双指缩放，此为缩放比例
+    var faceCardScale: CGFloat = SizeRatio.faceCardImageSizeToBoundsSize{ didSet { setNeedsDisplay()}}
 
     //设置rank和suit分两行且中心对齐的函数
     private func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString{
@@ -143,7 +146,7 @@ class PlayingCardView: UIView {
         //设置内部和背面填充图案
         if isFaceUp{                //卡牌朝上
             if let faceCardImage = UIImage(named: rankString, in: Bundle(for: self.classForCoder), compatibleWith: traitCollection){
-                faceCardImage.draw(in: bounds.zoom(by: SizeRatio.faceCardImageSizeToBoundsSize)) //缩放
+                faceCardImage.draw(in: bounds.zoom(by: faceCardScale)) //缩放
             } else{
                 drawPips()
             }
